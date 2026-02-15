@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz San Valentin Mi Amor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+/* General */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Fondo con 2 imágenes mitad y mitad */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4; /* transparencia del fondo */
+  z-index: -1;
+}
+
+body::before {
+  left: 0;
+  background-image: url("fotos/3.jpeg");
+}
+
+body::after {
+  right: 0;
+  background-image: url("fotos/5.jpeg");
+}
+
+/* Título */
+.titulo {
+  text-align: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #111;
+  padding: 20px 0;
+  transition: opacity 0.3s ease;
+}
+
+.titulo.hidden {
+  display: none;
+}
+
+/* Galería horizontal */
+.galeria-horizontal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.galeria-horizontal img {
+  width: 22%; /* 4 imágenes visibles en laptop sin hacer zoom */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+/* Imagen seleccionada */
+.galeria-horizontal img.active {
+  position: fixed;
+  top: 50%;
+  left: 15%; /* espacio para la historia */
+  transform: translateY(-50%);
+  width: 35%;   /* más grande, pero proporcional */
+  max-width: 600px;
+  z-index: 1000;
+}
+
+.galeria-horizontal img.inactive {
+  display: none;
+}
+
+/* Historia */
+.story {
+  display: none;
+  position: fixed;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  text-align: justify;
+  z-index: 1000;
+  font-size: 28px;
+  line-height: 1.5;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.story.active {
+  display: block;
+}
+
+/* Responsive para celular */
+@media (max-width: 768px) {
+  .galeria-horizontal {
+    flex-direction: column;
+  }
+  .galeria-horizontal img {
+    width: 90%;
+  }
+  .galeria-horizontal img.active {
+    width: 95%;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .story {
+    top: 70%;
+    right: 50%;
+    transform: translateX(50%);
+    max-width: 90%;
+    font-size: 20px;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+}
+</style>
+<body>
+  <!-- Título -->
+  <div class="titulo">Feliz San Valentin Mi Amor, Te Amo Mucho</div>
+
+  <!-- Galería horizontal -->
+  <section class="galeria-horizontal">
+    <img src="fotos/1.jpeg" alt="Imagen 1" data-index="1" data-story="Hola mi amor, quiero emepezar por esta foto ya que este dia fue un dia muy especial para mi y para ti , fue una salida en la cual comimos muy rico y conversamos mucho , esta fotito cada vez que lo veo me recuerdo a lo muy feliz que fue ese dia siempre recordare este dia ya que nos dimos un gusto muy bonito y vendran mejores lugares lo aseguro...">
+    <img src="fotos/2.jpeg" alt="Imagen 2" data-index="2" data-story="Dios nuevamente te puso en mi camino e hizo que te conociera y vi que ya eras una mujer distinta , con la cual quise nuevamente conocerte pero fui despacio por que habian cositas que aun no cerrabas asi que necesitaba avanzar a tu ritmo y fue lo mas bonito que hice.. y pasando el tiempo todos pensaban que estabamos cuando no era asi pero quien diria que yo ya me estaba enamorando , asi que decidi arriesgarme a preguntarte si podia ser tu novio estuve muy nervioso ese dia pero tu respuesta me lleno de felicidad..">
+    <img src="fotos/6.jpeg" alt="Imagen 3" data-index="3" data-story="Con la cual cerramos con un beso que siempre recordaré por siempre, me gusta la forma en la que me miras y me amas y hace que te ame de una forma inexplicable aunque ya nos dimos varios besitos muy hermosos por ciertos,tambien tuvimos mas aventuras chebres, visitas y muchas mas y acontinuacion una de ellas...">
+    <img src="fotos/4.jpeg" alt="Imagen 4" data-index="4" data-story="esta aventura que tuvimos este día es una de nuestras pequeñas salidas que tuvimos, no fue la primera ni tampoco fue la última, pero este día fue muy especial para mí porque vi a una niña viendo lo que ella amaba mucho un dragón que es una serie de peliculas que miraba de pequeña y verte de verdad me llenaba de alegria, obviamente que tendremos mas salidas, viajes y de todo amor, eres una excelente acompañante hice este detallido para ti para que lo recuerdes siempre rata jeje.. TE AMO MUCHO MARRONA JSJS...">
+  </section>
+
+  <!-- Contenedor de la historia -->
+  <div class="story" id="story">
+    <p id="story-text"></p>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.galeria-horizontal img');
+    const story = document.getElementById('story');
+    const storyText = document.getElementById('story-text');
+    const titulo = document.querySelector('.titulo');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        images.forEach(i => {
+          i.classList.remove('active', 'inactive');
+          i.classList.add('inactive');
+        });
+
+        img.classList.remove('inactive');
+        img.classList.add('active');
+
+        storyText.textContent = img.getAttribute('data-story');
+        story.classList.add('active');
+        titulo.classList.add('hidden');
+      });
+    });
+
+    /* Cerrar al hacer clic fuera */
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.galeria-horizontal') && !e.target.closest('.story')) {
+        images.forEach(i => {
+          i.classList.remove('active', 'inactive');
+        });
+        story.classList.remove('active');
+        titulo.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
